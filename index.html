@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #countdown {
+            font-size: 2em;
+        }
+    </style>
+    <title>カウントダウン</title>
+</head>
+<body>
+    <div id="countdown"></div>
+
+    <script>
+        // カウントダウンの終了日時を設定
+        const countdownDate = new Date("Jan 1, 2024 00:00:00").getTime();
+
+        // カウントダウンの更新
+        const countdownElement = document.getElementById('countdown');
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            // 日、時間、分、秒の計算
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // カウントダウン表示
+            countdownElement.innerHTML = days + "日 " + hours + "時間 " + minutes + "分 " + seconds + "秒 ";
+
+            // カウントダウン終了時の処理
+            if (distance < 0) {
+                clearInterval(x);
+                countdownElement.innerHTML = "カウントダウン終了しました";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
