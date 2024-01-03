@@ -1,122 +1,129 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    @font-face {
-      font-family: 'MyFont';
-      src: url('font.ttf') format('truetype');
-    }
-    body {
-      font-family: 'MyFont', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: url('back.webp') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
-      transition: background-color 10s linear;
-    }
-  body {
-    font-size: 32px; /* デフォルトのフォントサイズ（主にスマートフォン向け） */
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: 'MyFont';
+            src: url('font.ttf') format('truetype');
+        }
 
-  @media screen and (min-width: 600px) {
-    body {
-      font-size: 36px; /* 画面の幅が600px以上の場合のフォントサイズ（主にタブレット向け） */
-    }
-  }
+        body {
+            font-family: 'MyFont', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: url('back.webp') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            transition: background-color 10s linear;
+        }
 
-  @media screen and (min-width: 900px) {
-    body {
-      font-size: 38px; /* 画面の幅が900px以上の場合のフォントサイズ（主にデスクトップ向け） */
-    }
-  }
+        body {
+            font-size: 32px; /* デフォルトのフォントサイズ（主にスマートフォン向け） */
+        }
 
-  @media screen and (min-width: 1200px) {
-    body {
-      font-size: 50px; /* 画面の幅が1200px以上の場合のフォントサイズ（大画面デスクトップ向け） */
-    }
-  }
-    #countdown-container {
-      text-align: center;
-    }
-    #countdown {
-      font-size: calc(1em + 1vw);
-    }
-    #countdown-label {
-      font-size: calc(0.75em + 0.75vw);
-      margin-top: 10px;
-      visibility: hidden;
-    }
-  </style>
-  <title>2025年までのカウントダウン</title>
+        @media screen and (min-width: 600px) {
+            body {
+                font-size: 36px; /* 画面の幅が600px以上の場合のフォントサイズ（主にタブレット向け） */
+            }
+        }
+
+        @media screen and (min-width: 900px) {
+            body {
+                font-size: 38px; /* 画面の幅が900px以上の場合のフォントサイズ（主にデスクトップ向け） */
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            body {
+                font-size: 50px; /* 画面の幅が1200px以上の場合のフォントサイズ（大画面デスクトップ向け） */
+            }
+        }
+
+        #countdown-container {
+            text-align: center;
+        }
+
+        #countdown {
+            font-size: calc(1em + 1vw);
+        }
+
+        #countdown-label {
+            font-size: calc(0.75em + 0.75vw);
+            margin-top: 10px;
+            visibility: hidden;
+        }
+    </style>
+    <title>2024年までのカウントダウン</title>
 </head>
+
 <body>
-  <div id="countdown-container">
-    <div id="countdown-label">2025年までのこり</div>
-    <div id="countdown"></div>
-  </div>
-  <video id="background-video" style="position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%; z-index: -100;" autoplay loop>
-    <source src="movie.mp4" type="video/mp4">
-  </video>
-  <script>
-    const countdownDate = new Date("1 1, 2025 0:00:00").getTime();
-    const countdownElement = document.getElementById('countdown');
-    const countdownLabelElement = document.getElementById('countdown-label');
-    const videoElement = document.getElementById('background-video');
-    videoElement.style.display = 'none';  // 初期状態ではビデオを非表示にします
-    let lastSecond = 0;
-    const x = setInterval(function () {
-      const now = new Date().getTime();
-      const distance = countdownDate - now;
-      const years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
-      const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      const milliseconds = Math.floor((distance % 1000));
-      if (seconds !== lastSecond && distance < 60000) {
-        playAudio();
-      }
-      lastSecond = seconds;
-      if (years > 0) {
-        countdownElement.innerHTML = years + "年 " + days + "日 " + hours + "時間 " + minutes + "分 " + formatSeconds(seconds) + "秒 ";
-      } else if (days > 0) {
-        countdownElement.innerHTML = days + "日 " + hours + "時間 " + minutes + "分 " + formatSeconds(seconds) + "秒 ";
-      } else if (hours > 0) {
-        countdownElement.innerHTML = hours + "時間 " + minutes + "分 " + formatSeconds(seconds) + "秒 ";
-      } else if (minutes > 0) {
-        countdownElement.innerHTML = minutes + "分 " + formatSeconds(seconds) + "." + formatMilliseconds(milliseconds) + "秒 ";
-      } else {
-        countdownElement.innerHTML = `<span style="font-size: 3em;">${formatSeconds(seconds) + "." + formatMilliseconds(milliseconds) + "秒"}</span>`;
-      }
-      if (distance < 0) {
-        clearInterval(x);
-        countdownElement.innerHTML = "新年あけましておめでとうございます。<br>今年もよろしくお願いいたします。";
-        countdownLabelElement.style.display = 'none';
-        videoElement.style.display = 'block';  // カウントダウンが0になったらビデオを表示します
-        videoElement.onended = function() {
-          videoElement.style.display = 'none';  // ビデオの再生が終了したらビデオを非表示にします
-        };
-      } else {
-        countdownLabelElement.style.visibility = 'visible';
-      }
-    }, 1);
-    function playAudio() {
-      const audio = new Audio('sound.mp3');
-      audio.play();
-    }
-    function formatSeconds(s) {
-      return s < 10 ? '0' + s : s;
-    }
-    function formatMilliseconds(ms) {
-      return ms < 10 ? '00' + ms : (ms < 100 ? '0' + ms : ms);
-    }
-  </script>
+    <div id="countdown-container">
+        <div id="countdown-label">2024年までのこり</div>
+        <div id="countdown"></div>
+    </div>
+    <script>
+        const countdownDate = new Date("1 1, 2024 0:00:00").getTime();
+        const countdownElement = document.getElementById('countdown');
+        const countdownLabelElement = document.getElementById('countdown-label');
+        let lastSecond = 0;
+        const x = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+            const years = Math.floor(distance / (1000 * 60 * 60 * 24 * 365));
+            const days = Math.floor((distance % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            const milliseconds = Math.floor((distance % 1000));
+            if (seconds !== lastSecond && distance < 60000) {
+                playAudio();
+            }
+            lastSecond = seconds;
+            if (years > 0) {
+                countdownElement.innerHTML = years + "年 " + days + "日 " + hours + "時間 " + minutes + "分 " + formatSeconds(
+                    seconds) + "秒 ";
+            } else if (days > 0) {
+                countdownElement.innerHTML = days + "日 " + hours + "時間 " + minutes + "分 " + formatSeconds(seconds) +
+                    "秒 ";
+            } else if (hours > 0) {
+                countdownElement.innerHTML = hours + "時間 " + minutes + "分 " + formatSeconds(seconds) + "秒 ";
+            } else if (minutes > 0) {
+                countdownElement.innerHTML = minutes + "分 " + formatSeconds(seconds) + "." + formatMilliseconds(
+                    milliseconds) + "秒 ";
+            } else {
+                countdownElement.innerHTML = `<span style="font-size: 3em;">${formatSeconds(seconds) + "." +
+                    formatMilliseconds(milliseconds) + "秒"}</span>`;
+            }
+            if (distance <= 0) {
+                clearInterval(x);
+                countdownElement.innerHTML =
+                    "新年あけましておめでとうございます。<br>今年もよろしくお願いいたします。";
+                countdownLabelElement.style.display = 'none';
+            } else {
+                countdownLabelElement.style.visibility = 'visible';
+            }
+        }, 1);
+
+        function playAudio() {
+            const audio = new Audio('sound.mp3');
+            audio.play();
+        }
+
+        function formatSeconds(s) {
+            return s < 10 ? '0' + s : s;
+        }
+
+        function formatMilliseconds(ms) {
+            return ms < 10 ? '00' + ms : (ms < 100 ? '0' + ms : ms);
+        }
+    </script>
 </body>
+
 </html>
